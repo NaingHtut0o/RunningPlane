@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\plane.png" />
+    <None Remove="Resources\hero.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SharpVectors" Version="1.8.4.2" />
     <PackageReference Include="Svg" Version="3.4.7" />
 	<PackageReference Include="NLog" Version="5.4.0" />
@@ -22,6 +27,15 @@
 
   <ItemGroup>
     <Folder Include="logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\hero.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\plane.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

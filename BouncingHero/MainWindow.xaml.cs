@@ -1,16 +1,7 @@
-﻿using System;
-using System.Windows;
-using System.Diagnostics;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Interop;
-using System.Runtime.InteropServices;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using System.Windows.Controls;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Animation;
-using SharpVectors.Dom.Svg;
-using System.Windows.Media.Media3D;
 using System.Windows.Media.Imaging;
 using NLog;
 
@@ -20,7 +11,7 @@ namespace BouncingHero
     {
         private Image hero;
         private double xSpeed = 5, ySpeed = 5;
-        private double xPos = 100, yPos = 100;
+        private double xPos = 0, yPos = 0;
         private Random random = new Random();
         private double screenWidth, screenHeight;
         private RotateTransform aTransform;
@@ -40,6 +31,7 @@ namespace BouncingHero
             {
                 // Log the exception with the error level
                 logger.Error(ex, "An error occurred while performing an operation.");
+                throw;
             }
         }
 
@@ -61,7 +53,7 @@ namespace BouncingHero
         {
             hero = new Image
             {
-                Source = new BitmapImage(new Uri("D:\\Work\\BouncingHero\\BouncingHero\\plain.png")),
+                Source = new BitmapImage(new Uri("pack://application:,,,/Resources/hero.png")),
                 RenderTransformOrigin = new Point(0.5, 0.5),
                 //Opacity = 1.0,
             };
@@ -119,8 +111,21 @@ namespace BouncingHero
 
         private void Rotate(int degree)
         {
-            aTransform = new RotateTransform(degree);
-            hero.RenderTransform = aTransform;
+            int xscale = (int)(xSpeed / Math.Abs(xSpeed));
+            int yscale = (int)(ySpeed / Math.Abs(ySpeed));
+            int rdegree = ( xscale * yscale ) * xscale == -1 ? 270 : 0;
+            aTransform = new RotateTransform(rdegree);
+            //if (xscale * yscale == -1)
+            //{
+            //    int temp = xscale;
+            //    xscale = yscale;
+            //    yscale = temp;
+            //}
+            ScaleTransform scaleTransform = new ScaleTransform(xscale, 1);
+            TransformGroup transformGroup = new TransformGroup();
+            transformGroup.Children.Add(aTransform);
+            transformGroup.Children.Add(scaleTransform);
+            hero.RenderTransform = transformGroup;
         }
 
         private void RotateX()
